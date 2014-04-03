@@ -12,8 +12,8 @@ EVT_MENU(wxID_EXIT, MainFrame::OnExit)
 EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
-MainFrame::MainFrame(const wxString& title) : wxDocMDIParentFrame() {
-  wxDocMDIParentFrame::Create(&docManager_, NULL, wxID_ANY, title,
+MainFrame::MainFrame() : wxDocMDIParentFrame() {
+  wxDocMDIParentFrame::Create(&docManager_, NULL, wxID_ANY, "T3D",
                               wxPoint(50, 50), wxSize(450, 340));
 
   wxMenu* menuFile = new wxMenu;

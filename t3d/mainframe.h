@@ -12,9 +12,13 @@
 #include <wx/docmdi.h>
 #include <wx/docview.h>
 
+/** The main window.
+ */
 class MainFrame : public wxDocMDIParentFrame {
  public:
-  explicit MainFrame(const wxString& title);
+  /** Constructor.
+   */
+  MainFrame();
 
  private:
   void OnHello(wxCommandEvent& event);  // NOLINT - wx callbacks

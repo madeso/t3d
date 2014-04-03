@@ -9,8 +9,12 @@
 #include <wx/wx.h>
 #endif
 
+/** The t3d application.
+ */
 class T3dApp : public wxApp {
  public:
+  /** Create the main window.
+   */
   virtual bool OnInit();
 };
 

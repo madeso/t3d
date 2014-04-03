@@ -6,7 +6,7 @@
 wxIMPLEMENT_APP(T3dApp);
 
 bool T3dApp::OnInit() {
-  MainFrame* frame = new MainFrame("Hello World");
+  MainFrame* frame = new MainFrame();
   frame->Show(true);
   return true;
 }

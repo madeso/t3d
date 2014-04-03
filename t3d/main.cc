@@ -9,20 +9,26 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/docmdi.h>
+#include <wx/docview.h>
+
 class MyApp : public wxApp {
  public:
   virtual bool OnInit();
 };
 
-class MyFrame : public wxFrame {
+class MyFrame : public wxDocMDIParentFrame {
  public:
-  MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+  explicit MyFrame(const wxString& title);
 
  private:
   void OnHello(wxCommandEvent& event);  // NOLINT - wx callbacks
   void OnExit(wxCommandEvent& event);   // NOLINT - wx callbacks
   void OnAbout(wxCommandEvent& event);  // NOLINT - wx callbacks
   wxDECLARE_EVENT_TABLE();
+
+ private:
+  wxDocManager docManager_;
 };
 
 enum {
@@ -37,14 +43,15 @@ wxEND_EVENT_TABLE()
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit() {
-  MyFrame* frame =
-      new MyFrame("Hello World", wxPoint(50, 50), wxSize(450, 340));
+  MyFrame* frame = new MyFrame("Hello World");
   frame->Show(true);
   return true;
 }
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-    : wxFrame(NULL, wxID_ANY, title, pos, size) {
+MyFrame::MyFrame(const wxString& title) : wxDocMDIParentFrame() {
+  wxDocMDIParentFrame::Create(&docManager_, NULL, wxID_ANY, title,
+                              wxPoint(50, 50), wxSize(450, 340));
+
   wxMenu* menuFile = new wxMenu;
   menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
                    "Help string shown in status bar for this menu item");

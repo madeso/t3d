@@ -19,9 +19,9 @@ class MyFrame : public wxFrame {
   MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
  private:
-  void OnHello(wxCommandEvent& event);
-  void OnExit(wxCommandEvent& event);
-  void OnAbout(wxCommandEvent& event);
+  void OnHello(wxCommandEvent& event);  // NOLINT - wx callbacks
+  void OnExit(wxCommandEvent& event);   // NOLINT - wx callbacks
+  void OnAbout(wxCommandEvent& event);  // NOLINT - wx callbacks
   wxDECLARE_EVENT_TABLE();
 };
 
@@ -60,13 +60,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
   SetStatusText("Welcome to wxWidgets!");
 }
 
-void MyFrame::OnExit(wxCommandEvent& event) { Close(true); }
+void MyFrame::OnExit(wxCommandEvent& event) {  // NOLINT - wx callback
+  Close(true);
+}
 
-void MyFrame::OnAbout(wxCommandEvent& event) {
+void MyFrame::OnAbout(wxCommandEvent& event) {  // NOLINT - wx callback
   wxMessageBox("This is a wxWidgets' Hello world sample", "About Hello World",
                wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnHello(wxCommandEvent& event) {
+void MyFrame::OnHello(wxCommandEvent& event) {  // NOLINT - wx callback
   wxLogMessage("Hello world from wxWidgets!");
 }

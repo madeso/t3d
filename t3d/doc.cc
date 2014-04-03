@@ -3,3 +3,5 @@
 #include "t3d/doc.h"
 
 Doc::Doc() {}
+
+IMPLEMENT_DYNAMIC_CLASS(Doc, wxDocument)

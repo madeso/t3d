@@ -19,6 +19,11 @@ class Doc : public wxDocument {
   /** Constructor.
    */
   Doc();
+
+  /** Wx widgets code.
+   */
+  wxDECLARE_NO_COPY_CLASS(Doc);
+  DECLARE_DYNAMIC_CLASS(Doc)
 };
 
 #endif  // T3D_DOC_H_

@@ -3,9 +3,9 @@
 #include "t3d/app.h"
 #include "t3d/mainframe.h"
 
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP(T3dApp);
 
-bool MyApp::OnInit() {
+bool T3dApp::OnInit() {
   MainFrame* frame = new MainFrame("Hello World");
   frame->Show(true);
   return true;

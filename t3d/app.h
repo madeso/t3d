@@ -9,7 +9,7 @@
 #include <wx/wx.h>
 #endif
 
-class MyApp : public wxApp {
+class T3dApp : public wxApp {
  public:
   virtual bool OnInit();
 };

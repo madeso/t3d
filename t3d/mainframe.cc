@@ -1,35 +1,6 @@
 // t3d - Copyright (c) Gustav
 
-// wxWidgets "Hello world" Program
-// For compilers that support precompilation, includes "wx/wx.h".
-
-#include <wx/wxprec.h>
-
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
-#include <wx/docmdi.h>
-#include <wx/docview.h>
-
-class MyApp : public wxApp {
- public:
-  virtual bool OnInit();
-};
-
-class MainFrame : public wxDocMDIParentFrame {
- public:
-  explicit MainFrame(const wxString& title);
-
- private:
-  void OnHello(wxCommandEvent& event);  // NOLINT - wx callbacks
-  void OnExit(wxCommandEvent& event);   // NOLINT - wx callbacks
-  void OnAbout(wxCommandEvent& event);  // NOLINT - wx callbacks
-  wxDECLARE_EVENT_TABLE();
-
- private:
-  wxDocManager docManager_;
-};
+#include "t3d/mainframe.h"
 
 enum {
   ID_Hello = 1
@@ -40,13 +11,6 @@ EVT_MENU(ID_Hello, MainFrame::OnHello)
 EVT_MENU(wxID_EXIT, MainFrame::OnExit)
 EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 wxEND_EVENT_TABLE()
-wxIMPLEMENT_APP(MyApp);
-
-bool MyApp::OnInit() {
-  MainFrame* frame = new MainFrame("Hello World");
-  frame->Show(true);
-  return true;
-}
 
 MainFrame::MainFrame(const wxString& title) : wxDocMDIParentFrame() {
   wxDocMDIParentFrame::Create(&docManager_, NULL, wxID_ANY, title,

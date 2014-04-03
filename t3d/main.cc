@@ -17,9 +17,9 @@ class MyApp : public wxApp {
   virtual bool OnInit();
 };
 
-class MyFrame : public wxDocMDIParentFrame {
+class MainFrame : public wxDocMDIParentFrame {
  public:
-  explicit MyFrame(const wxString& title);
+  explicit MainFrame(const wxString& title);
 
  private:
   void OnHello(wxCommandEvent& event);  // NOLINT - wx callbacks
@@ -35,20 +35,20 @@ enum {
   ID_Hello = 1
 };
 
-wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(ID_Hello, MyFrame::OnHello)
-EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
+EVT_MENU(ID_Hello, MainFrame::OnHello)
+EVT_MENU(wxID_EXIT, MainFrame::OnExit)
+EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
 wxEND_EVENT_TABLE()
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit() {
-  MyFrame* frame = new MyFrame("Hello World");
+  MainFrame* frame = new MainFrame("Hello World");
   frame->Show(true);
   return true;
 }
 
-MyFrame::MyFrame(const wxString& title) : wxDocMDIParentFrame() {
+MainFrame::MainFrame(const wxString& title) : wxDocMDIParentFrame() {
   wxDocMDIParentFrame::Create(&docManager_, NULL, wxID_ANY, title,
                               wxPoint(50, 50), wxSize(450, 340));
 
@@ -67,15 +67,15 @@ MyFrame::MyFrame(const wxString& title) : wxDocMDIParentFrame() {
   SetStatusText("Welcome to wxWidgets!");
 }
 
-void MyFrame::OnExit(wxCommandEvent& event) {  // NOLINT - wx callback
+void MainFrame::OnExit(wxCommandEvent& event) {  // NOLINT - wx callback
   Close(true);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event) {  // NOLINT - wx callback
+void MainFrame::OnAbout(wxCommandEvent& event) {  // NOLINT - wx callback
   wxMessageBox("This is a wxWidgets' Hello world sample", "About Hello World",
                wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnHello(wxCommandEvent& event) {  // NOLINT - wx callback
+void MainFrame::OnHello(wxCommandEvent& event) {  // NOLINT - wx callback
   wxLogMessage("Hello world from wxWidgets!");
 }

@@ -90,7 +90,7 @@ bool T3dApp::OnInit() {
 
   CreateMenuBarForFrame(frame, menuFile, NULL);
 
-  frame->SetIcon(wxICON(doc));
+  // frame->SetIcon(wxICON(doc));
   frame->Centre();
   frame->Show();
 

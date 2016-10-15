@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 project(t3d)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS OFF)
@@ -17,10 +17,10 @@ if(WIN32)
 	
 	# character set to Not Set=ASCII/SBCS http://public.kitware.com/Bug/view.php?id=12189
 	ADD_DEFINITIONS(/D _SBCS)
-else(WIN32)
-	#also add c++11 flags
-	SET(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++ ${CMAKE_CXX_FLAGS}")
 endif(WIN32)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # force visual studio and the like to only have debug and release builds
 if(CMAKE_CONFIGURATION_TYPES)

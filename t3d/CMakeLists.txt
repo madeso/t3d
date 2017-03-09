@@ -8,42 +8,6 @@ set(all_src ${app_src} "${PROJECT_SOURCE_DIR}/t3d-config-in.h" ${src_glew} ${src
 
 message(STATUS "Linking with OpenGL ${OPENGL_LIBRARIES}")
 
-if(BUILD_USE_DOXYGEN)
-	message(STATUS "Doxygen exe is ${DOXYGEN_EXECUTABLE} with args ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile in dir ${CMAKE_SOURCE_DIR}/t3d")
-endif(BUILD_USE_DOXYGEN)
-
 add_executable(t3d WIN32 ${all_src})
-
-if(BUILD_USE_CLANG_FORMAT)
-	add_custom_command(TARGET t3d
-				   PRE_BUILD
-				   COMMAND ./call-clang-format.py ${CMAKE_CURRENT_SOURCE_DIR}/*.cc ${CMAKE_CURRENT_SOURCE_DIR}/*.h  ${mainsrc}
-				   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-				   COMMENT "Running clang format" VERBATIM)
-endif(BUILD_USE_CLANG_FORMAT)
-
-if(BUILD_USE_CPPLINT)
-	add_custom_command(TARGET t3d
-					   PRE_BUILD
-					   COMMAND ./cpplint.py ARGS --output=vs7 ${CMAKE_CURRENT_SOURCE_DIR}/*.cc ${CMAKE_CURRENT_SOURCE_DIR}/*.h  ${mainsrc}
-					   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-					   COMMENT "Running CppLint" VERBATIM)
-endif(BUILD_USE_CPPLINT)
-
-if(BUILD_USE_CPPCHECK)
-	add_custom_command(TARGET t3d
-					   PRE_BUILD
-					   COMMAND cppcheck --enable=all --std=c++11 --suppress=unusedFunction --quiet --template=vs ${CMAKE_SOURCE_DIR}/t3d
-					   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-					   COMMENT "Running cppcheck" VERBATIM)
-endif(BUILD_USE_CPPCHECK)
-
-if(BUILD_USE_DOXYGEN)
-	add_custom_command(TARGET t3d
-					   PRE_LINK
-					   COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/../Doxyfile
-					   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-					   COMMENT "Running Doxygen" VERBATIM)
-endif(BUILD_USE_DOXYGEN)
 
 target_link_libraries(t3d ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )

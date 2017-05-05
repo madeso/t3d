@@ -4,6 +4,8 @@
 #include "wx/wx.h"
 #include "wx/glcanvas.h"
 
+#include "core/mesh.h"
+
 class Pane : public wxGLCanvas
 {
   public:
@@ -34,6 +36,7 @@ class Pane : public wxGLCanvas
 
  private:
   wxGLContext* context;
+  Mesh mesh;
 };
 
 #endif // T3D_PANE

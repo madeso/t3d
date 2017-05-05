@@ -11,4 +11,4 @@ message(STATUS "Linking with OpenGL ${OPENGL_LIBRARIES}")
 
 add_executable(t3d WIN32 ${all_src})
 
-target_link_libraries(t3d ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
+target_link_libraries(t3d ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} core)

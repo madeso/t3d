@@ -43,4 +43,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+add_subdirectory(external/euphoria)
+include_directories(external/euphoria)
 add_subdirectory(t3d)

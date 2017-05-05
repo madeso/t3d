@@ -6,6 +6,8 @@
 
 #include "wxgl.h"
 
+#include <sstream>
+
 BEGIN_EVENT_TABLE(Pane, wxGLCanvas)
 EVT_MOTION(Pane::OnMouseMoved)
 EVT_LEFT_DOWN(Pane::OnMouseDown)
@@ -29,13 +31,6 @@ void Pane::OnRightClick(wxMouseEvent &event) {}
 void Pane::OnMouseLeftWindow(wxMouseEvent &event) {}
 void Pane::OnKeyPressed(wxKeyEvent &event) {}
 void Pane::OnKeyReleased(wxKeyEvent &event) {}
-
-// Vertices and faces of a simple cube to demonstrate 3D Render
-// source: http://www.opengl.org/resources/code/samples/glut_examples/examples/cube.c
-GLfloat v[8][3];
-GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
-    {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
-    {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
 
 
 wxGLAttributes GetOpenglAttributes() {
@@ -62,14 +57,13 @@ Pane::Pane(wxFrame* parent) :
 
   context = new wxGLContext(this, nullptr, &attributes);
 
-  // prepare a simple cube to demonstrate 3D Render
-  // source: http://www.opengl.org/resources/code/samples/glut_examples/examples/cube.c
-  v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
-  v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
-  v[0][1] = v[1][1] = v[4][1] = v[5][1] = -1;
-  v[2][1] = v[3][1] = v[6][1] = v[7][1] = 1;
-  v[0][2] = v[3][2] = v[4][2] = v[7][2] = 1;
-  v[1][2] = v[2][2] = v[5][2] = v[6][2] = -1;
+  // MeshLoadResult load = LoadMesh("testmesh.obj");
+  try {
+    mesh = CreateBox(1.0f, 1.0f, 1.0f);
+  }
+  catch(...) {
+    wxMessageBox("fail");
+  }
 
   // To avoid flashing on MSW
   SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -139,6 +133,21 @@ int Pane::GetHeight()
   return GetSize().y;
 }
 
+void RenderMesh(const Mesh& mesh) {
+  for(const MeshPart& part : mesh.parts) {
+    const Material mat = mesh.materials[part.material];
+    glColor4f(mat.diffuse.GetRed(), mat.diffuse.GetGreen(), mat.diffuse.GetBlue(), mat.alpha);
+    for(int i=0; i<part.facecount; ++i) {
+      int b = i * 3;
+      const int pointsize = 5;
+      glBegin(GL_LINE_LOOP);
+      glVertex3fv(&part.points[part.faces[b + 0]*pointsize]);
+      glVertex3fv(&part.points[part.faces[b + 1]*pointsize]);
+      glVertex3fv(&part.points[part.faces[b + 2]*pointsize]);
+      glEnd();
+    }
+  }
+}
 
 void Pane::Render(wxPaintEvent &evt)
 {
@@ -148,30 +157,6 @@ void Pane::Render(wxPaintEvent &evt)
   wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  // ------------- draw some 2D ----------------
-  Prepare2DViewport(0, 0, GetWidth() / 2, GetHeight());
-  glLoadIdentity();
-
-  // white background
-  glColor4f(1, 1, 1, 1);
-  glBegin(GL_QUADS);
-  glVertex3f(0,0,0);
-  glVertex3f(GetWidth(),0,0);
-  glVertex3f(GetWidth(), GetHeight(),0);
-  glVertex3f(0, GetHeight(),0);
-  glEnd();
-
-  // red square
-  glColor4f(1, 0, 0, 1);
-  glBegin(GL_QUADS);
-  glVertex3f(GetWidth()/8, GetHeight()/3, 0);
-  glVertex3f(GetWidth()*3/8, GetHeight()/3, 0);
-  glVertex3f(GetWidth()*3/8, GetHeight()*2/3, 0);
-  glVertex3f(GetWidth()/8, GetHeight()*2/3, 0);
-  glEnd();
-
-  // ------------- draw some 3D ----------------
   Prepare3DViewport(0, 0, GetWidth(), GetHeight());
   glLoadIdentity();
 
@@ -179,17 +164,7 @@ void Pane::Render(wxPaintEvent &evt)
   glTranslatef(0,0,-5);
   glRotatef(50.0f, 0.0f, 1.0f, 0.0f);
 
-  glColor4f(1, 0, 0, 1);
-  for (int i = 0; i < 6; i++)
-  {
-    glBegin(GL_LINE_STRIP);
-    glVertex3fv(&v[faces[i][0]][0]);
-    glVertex3fv(&v[faces[i][1]][0]);
-    glVertex3fv(&v[faces[i][2]][0]);
-    glVertex3fv(&v[faces[i][3]][0]);
-    glVertex3fv(&v[faces[i][0]][0]);
-    glEnd();
-  }
+  RenderMesh(mesh);
 
   glFlush();
   SwapBuffers();

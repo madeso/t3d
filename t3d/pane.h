@@ -7,7 +7,7 @@
 class Pane : public wxGLCanvas
 {
   public:
-  Pane(wxFrame* parent, int* args);
+  explicit Pane(wxFrame* parent);
   virtual ~Pane();
 
   int GetWidth();

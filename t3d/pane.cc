@@ -38,11 +38,30 @@ GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
     {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
 
 
+wxGLAttributes GetOpenglAttributes() {
+  wxGLAttributes attributes;
+  attributes.PlatformDefaults().RGBA().DoubleBuffer().Depth(16).EndList();
 
-Pane::Pane(wxFrame* parent, int* args) :
-    wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+  bool supported = wxGLCanvas::IsDisplaySupported(attributes);
+
+  if ( !supported )
+  {
+    wxMessageBox("Visual attributes for OpenGL are not accepted.\nThe app will exit now.",
+                 "Error with OpenGL", wxOK | wxICON_ERROR);
+  }
+
+  return attributes;
+}
+
+
+Pane::Pane(wxFrame* parent) :
+    wxGLCanvas(parent, GetOpenglAttributes())
 {
-  context = new wxGLContext(this);
+  wxGLContextAttrs attributes;
+  attributes.PlatformDefaults().OGLVersion(1, 0).EndList();
+
+  context = new wxGLContext(this, nullptr, &attributes);
+
   // prepare a simple cube to demonstrate 3D Render
   // source: http://www.opengl.org/resources/code/samples/glut_examples/examples/cube.c
   v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;

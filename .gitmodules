@@ -1,0 +1,3 @@
+[submodule "external/euphoria"]
+	path = external/euphoria
+	url = git@github.com:madeso/euphoria.git

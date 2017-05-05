@@ -1,4 +1,5 @@
 FILE(GLOB app_src_glob *.cc;*.h;*.inl)
+configure_file("${PROJECT_SOURCE_DIR}/t3d-config-in.h" "${PROJECT_BINARY_DIR}/t3d-config.h")
 set(app_src ${app_src_glob} "${PROJECT_BINARY_DIR}/t3d-config.h")
 
 source_group("" FILES ${app_src})

@@ -6,6 +6,8 @@
 
 #include "core/mesh.h"
 
+#include "grid.h"
+
 class Pane : public wxGLCanvas
 {
   public:
@@ -37,6 +39,7 @@ class Pane : public wxGLCanvas
  private:
   wxGLContext* context;
   Mesh mesh;
+  Grid grid;
 };
 
 #endif // T3D_PANE

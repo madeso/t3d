@@ -165,6 +165,7 @@ void Pane::Render(wxPaintEvent &evt)
   glRotatef(50.0f, 0.0f, 1.0f, 0.0f);
 
   RenderMesh(mesh);
+  grid.Draw();
 
   glFlush();
   SwapBuffers();

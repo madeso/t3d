@@ -7,6 +7,9 @@ The plan is for the editor to work in three major phases:
 
 The first part is the detailing out the level with minecraft/voxel like editing only placing cubes. The second part is replacing those voxels with polygon counterparts, created by an artist. This step should perhaps be more or less dynamic with logic based on [bitmasking](http://www.angryfishstudios.com/2011/04/adventures-in-bitmasking/). The third step is placing entities/detail objects and other data, perhaps adding some visual scripting language.
 
+Or it will work like tiled placing tiles with a hammer like ui for browsing tiles and a sketchup like interface for creating new/custom tiles.
+![hammer like ui](texture_browser.png)
+
 Link dump
 ==========
 

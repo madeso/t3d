@@ -1,3 +1,6 @@
 [submodule "external/euphoria"]
 	path = external/euphoria
 	url = git@github.com:madeso/euphoria.git
+[submodule "external/wxutil"]
+	path = external/wxutil
+	url = git@github.com:madeso/wxutil.git

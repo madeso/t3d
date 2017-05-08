@@ -14,8 +14,6 @@ public:
 
 private:
   void OnOk( wxCommandEvent & event );
-
-  DECLARE_EVENT_TABLE()
 };
 
 

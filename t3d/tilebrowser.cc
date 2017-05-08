@@ -7,11 +7,11 @@
 TileBrowser::TileBrowser(wxWindow *parent)
 : wxDialog(parent, wxID_ANY, "Tile browser", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE)
 {
+  wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
+  topsizer->Add(CreateButtonSizer(wxOK | wxCANCEL));
+  SetSizerAndFit(topsizer);
 }
 
 void TileBrowser::OnOk(wxCommandEvent &event) {
   Close();
 }
-
-BEGIN_EVENT_TABLE(TileBrowser, wxDialog)
-END_EVENT_TABLE()

@@ -43,6 +43,12 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+include_directories(external/wxutil)
+SET(WXUTIL_SOURCE
+    ${CMAKE_SOURCE_DIR}/external/wxutil/aboutbox.cc
+    ${CMAKE_SOURCE_DIR}/external/wxutil/aboutbox.h
+    )
+
 add_subdirectory(external/euphoria)
 include_directories(external/euphoria)
 add_subdirectory(t3d)

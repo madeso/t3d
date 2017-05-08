@@ -4,6 +4,9 @@
 #include "pane.h"
 #include "tilebrowser.h"
 
+#include "aboutbox.h"
+#include "about_img.h"
+
 class App: public wxApp
 {
   virtual bool OnInit();
@@ -17,6 +20,7 @@ public:
   MainFrame();
 
   void OnNewTile(wxCommandEvent& event);
+  void OnAbout(wxCommandEvent& event);
 
 private:
   Pane* pane;
@@ -43,6 +47,7 @@ MainFrame::MainFrame()
   wxMenuBar* m_pMenuBar = new wxMenuBar();
 
   Bind(wxEVT_MENU, &MainFrame::OnNewTile, this, ID_NEWTILE);
+  Bind(wxEVT_MENU, &MainFrame::OnAbout, this, wxID_ABOUT);
 
   // File Menu
   wxMenu* m_pFileMenu = new wxMenu();
@@ -72,4 +77,31 @@ MainFrame::MainFrame()
 void MainFrame::OnNewTile(wxCommandEvent &event) {
   TileBrowser dlg(this);
   dlg.ShowModal();
+}
+
+
+void MainFrame::OnAbout(wxCommandEvent &event) {
+  // Create About box
+  wxMozillaLikeAboutBoxDialog * dlg = new wxMozillaLikeAboutBoxDialog(this);
+  // Set application name
+  dlg->SetAppName(wxTheApp->GetAppName());
+  // Set application version
+  dlg->SetVersion(wxT("1.0.0 b1"));
+  // Set copyright message
+  dlg->SetCopyright(wxString::Format(wxT("%c %i %s"),
+                                     (wxChar) 0x00A9, wxDateTime::Now().GetYear(),
+                                     _("Volodymir (T-Rex) Tryapichko. All rights reserved. Please contact author if you have any copyright-related questions.")));
+  // Set build info message. This is optional step. If you don't specify build info message then
+  // default one will be used
+  dlg->SetCustomBuildInfo(wxString::Format(wxT("%s. %s"),
+                                           wxMozillaLikeAboutBoxDialog::GetBuildInfo(wxMozillaLikeAboutBoxDialog::wxBUILDINFO_LONG).GetData(),
+                                           _("Compiled by T-Rex personally :)")));
+  // Set header bitmap
+  dlg->SetHeaderBitmap(wxGetBitmapFromMemory(about_jpg_start, about_jpg_size));
+  // Apply changes
+  dlg->ApplyInfo();
+  // Show dialog
+  dlg->ShowModal();
+  // Destroy dialog
+  dlg->Destroy();
 }

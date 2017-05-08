@@ -188,7 +188,7 @@ void Pane::Render(wxPaintEvent &evt)
   glLoadIdentity();
 
   glColor4f(0,0,1,1);
-  glTranslatef(0,0,-5);
+  glTranslatef(0, -1.0f , -5.0f);
   glRotatef(orientation.y, 1.0f, 0.0f, 0.0f);
   glRotatef(orientation.x, 0.0f, 1.0f, 0.0f);
 

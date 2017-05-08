@@ -40,6 +40,11 @@ class Pane : public wxGLCanvas
   wxGLContext* context;
   Mesh mesh;
   Grid grid;
+
+  bool down;
+  vec2f pos;
+  vec2f orientation;
+  void OnPos(const vec2f& newPos);
 };
 
 #endif // T3D_PANE

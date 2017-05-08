@@ -21,16 +21,40 @@ EVT_MOUSEWHEEL(Pane::OnMouseWheelMoved)
 EVT_PAINT(Pane::Render)
 END_EVENT_TABLE()
 
+vec2f C(const wxPoint& p) {
+  return vec2f(p.x, p.y);
+}
 
 // some useful events to use
-void Pane::OnMouseMoved(wxMouseEvent &event) {}
-void Pane::OnMouseDown(wxMouseEvent &event) {}
-void Pane::OnMouseWheelMoved(wxMouseEvent &event) {}
-void Pane::OnMouseReleased(wxMouseEvent &event) {}
+void Pane::OnMouseMoved(wxMouseEvent &event) {
+  OnPos(C(event.GetPosition()));
+}
+void Pane::OnMouseDown(wxMouseEvent &event) {
+  OnPos(C(event.GetPosition()));
+  down = true;
+}
+void Pane::OnMouseWheelMoved(wxMouseEvent &event) {
+  OnPos(C(event.GetPosition()));
+}
+void Pane::OnMouseReleased(wxMouseEvent &event) {
+  OnPos(C(event.GetPosition()));
+  down = false;
+}
 void Pane::OnRightClick(wxMouseEvent &event) {}
 void Pane::OnMouseLeftWindow(wxMouseEvent &event) {}
 void Pane::OnKeyPressed(wxKeyEvent &event) {}
 void Pane::OnKeyReleased(wxKeyEvent &event) {}
+
+void Pane::OnPos(const vec2f& newPos) {
+  if(down) {
+    const vec2f delta = newPos - pos;
+    if(delta.GetLengthSquared() > 1.0f) {
+      orientation += delta;
+      Refresh();
+    }
+  }
+  pos = newPos;
+}
 
 
 wxGLAttributes GetOpenglAttributes() {
@@ -49,8 +73,11 @@ wxGLAttributes GetOpenglAttributes() {
 }
 
 
-Pane::Pane(wxFrame* parent) :
-    wxGLCanvas(parent, GetOpenglAttributes())
+Pane::Pane(wxFrame* parent)
+    : wxGLCanvas(parent, GetOpenglAttributes())
+    , down(false)
+    , pos(0.0f, 0.0f)
+    , orientation(0.0f, 0.0f)
 {
   wxGLContextAttrs attributes;
   attributes.PlatformDefaults().OGLVersion(1, 0).EndList();
@@ -162,7 +189,8 @@ void Pane::Render(wxPaintEvent &evt)
 
   glColor4f(0,0,1,1);
   glTranslatef(0,0,-5);
-  glRotatef(50.0f, 0.0f, 1.0f, 0.0f);
+  glRotatef(orientation.y, 1.0f, 0.0f, 0.0f);
+  glRotatef(orientation.x, 0.0f, 1.0f, 0.0f);
 
   RenderMesh(mesh);
   grid.Draw();

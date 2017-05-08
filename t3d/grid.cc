@@ -24,5 +24,5 @@ void Grid::DrawLinesAt(float s) const {
   glVertex3f(-size_, y, s);
   glVertex3f(size_, y, s);
   glVertex3f(s, y, -size_);
-  glVertex3f(s, y, -size_);
+  glVertex3f(s, y, size_);
 }

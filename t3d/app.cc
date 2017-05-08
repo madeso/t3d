@@ -15,7 +15,7 @@ class App: public wxApp
 
 IMPLEMENT_APP(App)
 
-class MainFrame : wxFrame {
+class MainFrame : public wxFrame {
 public:
   MainFrame();
 
@@ -33,7 +33,8 @@ bool App::OnInit()
 }
 
 enum EventId {
-  ID_NEWTILE = 1
+  HIGHEST = wxID_HIGHEST
+  ,ID_NEWTILE
 };
 
 
@@ -54,7 +55,7 @@ MainFrame::MainFrame()
   m_pFileMenu->Append(wxID_OPEN, _T("&Open"));
   m_pFileMenu->Append(wxID_SAVE, _T("&Save"));
   m_pFileMenu->AppendSeparator();
-  m_pFileMenu->Append(ID_NEWTILE, _T("New &Tile\tCtrl-T"));
+  m_pFileMenu->Append(ID_NEWTILE, _T("Select &Tile\tCtrl-T"));
   m_pFileMenu->AppendSeparator();
   m_pFileMenu->Append(wxID_EXIT, _T("&Quit"));
   m_pMenuBar->Append(m_pFileMenu, _T("&File"));
@@ -82,7 +83,7 @@ void MainFrame::OnNewTile(wxCommandEvent &event) {
 
 void MainFrame::OnAbout(wxCommandEvent &event) {
   // Create About box
-  wxMozillaLikeAboutBoxDialog * dlg = new wxMozillaLikeAboutBoxDialog(this);
+  AboutBox * dlg = new AboutBox(this);
   // Set application name
   dlg->SetAppName(wxTheApp->GetAppName());
   // Set application version
@@ -94,7 +95,7 @@ void MainFrame::OnAbout(wxCommandEvent &event) {
   // Set build info message. This is optional step. If you don't specify build info message then
   // default one will be used
   dlg->SetCustomBuildInfo(wxString::Format(wxT("%s. %s"),
-                                           wxMozillaLikeAboutBoxDialog::GetBuildInfo(wxMozillaLikeAboutBoxDialog::wxBUILDINFO_LONG).GetData(),
+                                           AboutBox::GetBuildInfo(AboutBox::wxBUILDINFO_LONG).GetData(),
                                            _("Compiled by T-Rex personally :)")));
   // Set header bitmap
   dlg->SetHeaderBitmap(wxGetBitmapFromMemory(about_jpg_start, about_jpg_size));

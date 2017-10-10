@@ -1,14 +1,28 @@
-FILE(GLOB app_src_glob *.cc;*.h;*.inl)
-configure_file("${PROJECT_SOURCE_DIR}/t3d-config-in.h" "${PROJECT_BINARY_DIR}/t3d-config.h")
-set(app_src ${app_src_glob} "${PROJECT_BINARY_DIR}/t3d-config.h")
+file(GLOB app_src_glob *.cpp;*.cc;*.h;*.inl)
 
+include_directories(SYSTEM ${SDL2_INCLUDE_DIR})
+
+set(app_src ${app_src_glob})
 source_group("" FILES ${app_src})
-source_group(cmake FILES "${PROJECT_SOURCE_DIR}/t3d-config-in.h")
 
-set(all_src ${app_src} "${PROJECT_SOURCE_DIR}/t3d-config-in.h" ${src_glew} ${src_soil} ${src_jsoncpp} ${src_lua} ${WXUTIL_SOURCE} about_img.c)
+set(all_src ${app_src} ${src_glew})
 
-message(STATUS "Linking with OpenGL ${OPENGL_LIBRARIES}")
+# imgui
+include_directories(SYSTEM
+                    ../external/euphoria/external/imgui/
+                    )
 
-add_executable(t3d WIN32 ${all_src})
+add_executable(t3d WIN32 MACOSX_BUNDLE ${all_src})
 
-target_link_libraries(t3d ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} core)
+target_link_libraries(t3d
+                      core
+                      render
+                      window
+                      ${SDL2_LIBRARY}
+                      )
+MESSAGE(STATUS "SDL2 libraries are ${SDL2_LIBRARY}")
+MESSAGE(STATUS "SDL2 main library is ${SDL2MAIN_LIBRARY}")
+
+if(CMAKE_COMPILER_IS_GNUCC)
+  set_property(TARGET t3d APPEND_STRING PROPERTY COMPILE_FLAGS -Wall)
+endif()

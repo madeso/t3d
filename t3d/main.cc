@@ -124,7 +124,7 @@ main(int argc, char** argv)
   camera.SetPosition(vec3f(0, 0, 0));
 
   FpsController fps;
-  fps.SetPosition(vec3f(0, 0, 3));
+  fps.position = vec3f{0, 0, 3};
 
   while(running)
   {
@@ -245,7 +245,7 @@ main(int argc, char** argv)
     }
 
     fps.Update(delta);
-    camera.SetPosition(fps.GetPosition());
+    camera.SetPosition(fps.position);
     camera.SetRotation(fps.GetRotation());
 
     init.ClearScreen(Rgb::From(Color::DarkslateGray));

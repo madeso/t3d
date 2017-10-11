@@ -24,10 +24,17 @@ class TileLibrary
 {
  public:
   void
-  AddDirectory(const std::string& directory_path);
+  AddDirectory(
+      const std::string&   directory_path,
+      MaterialShaderCache* shader_cache,
+      TextureCache*        texture_cache);
 
   void
-  AddFile(const std::string& current_directory, const std::string& path);
+  AddFile(
+      const std::string&   current_directory,
+      const std::string&   path,
+      MaterialShaderCache* shader_cache,
+      TextureCache*        texture_cache);
 
   std::vector<std::shared_ptr<Tile>> tiles;
 };

@@ -100,13 +100,23 @@ main(int argc, char** argv)
   TextureCache texture_cache{&file_system};
 
   TileLibrary tile_library;
-  tile_library.AddDirectory("nature");
+  tile_library.AddDirectory("nature", &material_shader_cache, &texture_cache);
+
+  World world;
+
+  std::vector<std::shared_ptr<Actor>> actors;
+
+  for(auto tile : tile_library.tiles)
+  {
+    auto actor = std::make_shared<Actor>(tile->mesh);
+    world.AddActor(actor);
+    actors.emplace_back(actor);
+  }
 
   bool running = true;
 
   SdlTimer timer;
 
-  World world;
 
   bool capturing_mouse_movement = false;
 
@@ -153,12 +163,33 @@ main(int argc, char** argv)
 
       for(auto tile : tile_library.tiles)
       {
-        std::string display = Str{} << tile->name << ": " << tile->aabb.GetSize();
+        std::string display = Str{} << tile->name << ": "
+                                    << tile->aabb.GetSize();
         ImGui::Selectable(display.c_str());
       }
 
       ImGui::ListBoxFooter();
       ImGui::End();
+    }
+
+    int items_per_row = 5;
+    int col           = 0;
+    int row           = 0;
+
+    float size = 3;
+
+    for(auto a : actors)
+    {
+      const auto x = col * size;
+      const auto z = row * size;
+      a->SetPosition(vec3f{x, 0, z});
+
+      col += 1;
+      if(col > items_per_row)
+      {
+        col = 0;
+        row += 1;
+      }
     }
 
     SDL_Event e;

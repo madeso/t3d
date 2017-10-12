@@ -45,7 +45,7 @@ void
 HandleEvents(
     bool           show_imgui,
     bool&          running,
-    bool           immersive_mode,
+    bool&          immersive_mode,
     FpsController& fps,
     float          delta,
     ImguiLibrary&  imgui,
@@ -196,6 +196,9 @@ main(int argc, char** argv)
   fps.position = vec3f{0, 0, 3};
   window.EnableCharEvent(!immersive_mode);
 
+  int   items_per_row = 5;
+  float size          = 3;
+
   while(running)
   {
     const bool  show_imgui = !immersive_mode;
@@ -219,12 +222,10 @@ main(int argc, char** argv)
       ImGui::ColorEdit3("Ambient", world.light.ModifyAmbient()->GetData());
       ImGui::ColorEdit3("Diffuse", world.light.ModifyDiffuse()->GetData());
       ImGui::ColorEdit3("Specular", world.light.ModifySpecular()->GetData());
+      ImGui::End();
 
-      ImguiAngleSlider(
-          "Cutoff Angle Inner", world.light.GetCutoffAngleInnerMod(), 0, 45);
-      ImguiAngleSlider(
-          "Cutoff Angle Outer", world.light.GetCutoffAngleOuterMod(), 0, 90);
-
+      ImGui::Begin("Camera");
+      ImGui::InputFloat("Speed", &fps.speed);
       ImGui::End();
 
       ImGui::ShowTestWindow();
@@ -232,6 +233,8 @@ main(int argc, char** argv)
 
       // ImGui::ListBox("", &selection[i], items, IM_ARRAYSIZE(items));
       ImGui::Begin("Tiles");
+      ImGui::InputInt("Items per row", &items_per_row);
+      ImGui::InputFloat("Size", &size);
       ImGui::ListBoxHeader("Tiles");
 
       for(auto tile : tile_library.tiles)
@@ -245,23 +248,23 @@ main(int argc, char** argv)
       ImGui::End();
     }
 
-    int items_per_row = 5;
-    int col           = 0;
-    int row           = 0;
+    int col = 0;
+    int row = 0;
 
-    float size = 3;
-
-    for(auto a : actors)
+    if(items_per_row > 0)
     {
-      const auto x = col * size;
-      const auto z = row * size;
-      a->SetPosition(vec3f{x, 0, z});
-
-      col += 1;
-      if(col > items_per_row)
+      for(auto a : actors)
       {
-        col = 0;
-        row += 1;
+        const auto x = col * size;
+        const auto z = row * size;
+        a->SetPosition(vec3f{x, 0, z});
+
+        col += 1;
+        if(col > items_per_row)
+        {
+          col = 0;
+          row += 1;
+        }
       }
     }
 

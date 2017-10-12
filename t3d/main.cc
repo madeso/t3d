@@ -41,6 +41,75 @@
 
 #include "t3d/tilelibrary.h"
 
+void
+HandleEvents(
+    bool           show_imgui,
+    bool&          running,
+    bool           immersive_mode,
+    FpsController& fps,
+    float          delta,
+    ImguiLibrary&  imgui,
+    SdlWindow&     window)
+{
+  SDL_Event e;
+  while(SDL_PollEvent(&e) != 0)
+  {
+    if(show_imgui)
+    {
+      imgui.ProcessEvents(&e);
+    }
+    switch(e.type)
+    {
+      case SDL_QUIT:
+        running = false;
+        break;
+      case SDL_MOUSEMOTION:
+        if(!show_imgui)
+        {
+          fps.Look(e.motion.xrel, e.motion.yrel);
+        }
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+      {
+        const bool down = e.type == SDL_KEYDOWN;
+
+        if(!show_imgui)
+        {
+          fps.HandleSdlKey(e.key.keysym.sym, down);
+        }
+
+        switch(e.key.keysym.sym)
+        {
+          case SDLK_ESCAPE:
+            if(down)
+            {
+              running = false;
+            }
+            break;
+          case SDLK_TAB:
+            if(!down)
+            {
+              immersive_mode = !immersive_mode;
+              window.KeepWithin(immersive_mode);
+              window.EnableCharEvent(!immersive_mode);
+            }
+            break;
+          default:
+            // ignore other keys
+            break;
+        }
+      }
+      break;
+      default:
+        // ignore other events
+        break;
+    }
+  }
+
+  fps.Update(delta);
+}
+
 int
 main(int argc, char** argv)
 {
@@ -118,22 +187,26 @@ main(int argc, char** argv)
   SdlTimer timer;
 
 
-  bool capturing_mouse_movement = false;
+  bool immersive_mode = false;
 
   Camera camera;
   camera.SetPosition(vec3f(0, 0, 0));
 
   FpsController fps;
   fps.position = vec3f{0, 0, 3};
+  window.EnableCharEvent(!immersive_mode);
 
   while(running)
   {
-    const bool  show_imgui = !capturing_mouse_movement;
+    const bool  show_imgui = !immersive_mode;
     const float delta      = timer.Update();
+
+    HandleEvents(
+        show_imgui, running, immersive_mode, fps, delta, imgui, window);
 
     if(show_imgui)
     {
-      imgui.Begin();
+      imgui.StartNewFrame();
 
       ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
 
@@ -192,59 +265,7 @@ main(int argc, char** argv)
       }
     }
 
-    SDL_Event e;
-    while(SDL_PollEvent(&e) != 0)
-    {
-      if(show_imgui)
-      {
-        imgui.ProcessEvents(&e);
-      }
-      switch(e.type)
-      {
-        case SDL_QUIT:
-          running = false;
-          break;
-        case SDL_MOUSEMOTION:
-          if(capturing_mouse_movement)
-          {
-            fps.Look(e.motion.xrel, e.motion.yrel);
-          }
-          break;
-        case SDL_KEYDOWN:
-        case SDL_KEYUP:
-        {
-          const bool down = e.type == SDL_KEYDOWN;
 
-          fps.HandleSdlKey(e.key.keysym.sym, down);
-
-          switch(e.key.keysym.sym)
-          {
-            case SDLK_ESCAPE:
-              if(down)
-              {
-                running = false;
-              }
-              break;
-            case SDLK_TAB:
-              if(!down)
-              {
-                capturing_mouse_movement = !capturing_mouse_movement;
-                window.KeepWithin(capturing_mouse_movement);
-              }
-              break;
-            default:
-              // ignore other keys
-              break;
-          }
-        }
-        break;
-        default:
-          // ignore other events
-          break;
-      }
-    }
-
-    fps.Update(delta);
     camera.SetPosition(fps.position);
     camera.SetRotation(fps.GetRotation());
 
